@@ -1,0 +1,890 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F7F1E8;
+    --blush: #E8C9B8;
+    --sage: #9AAF8E;
+    --dusty-rose: #D4A5A5;
+    --terra: #C07A5A;
+    --brown: #6B4C3B;
+    --gold: #C9A96E;
+    --karo-red: #8B1A1A;
+    --karo-black: #1C1612;
+    --tan: #C8A97A;
+    --linen: #EDE8DF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F0EAE0;
+    color: var(--brown);
+  }
+
+  /* NAV DOTS */
+  .nav {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brown);
+    opacity: 0.2;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+    border: none;
+    padding: 0;
+  }
+  .nav-dot.active { opacity: 0.9; transform: scale(1.4); background: var(--gold); }
+
+  /* SLIDES */
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 52px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .slide.visible { opacity: 1; transform: translateY(0); }
+
+  /* ---- S1 COVER ---- */
+  .s-cover {
+    background: var(--cream);
+    align-items: center;
+    text-align: center;
+  }
+  .s-cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(212,165,165,0.22) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .s-cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(154,175,142,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover-eyebrow {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 18px;
+    font-weight: 300;
+  }
+  .cover-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 7vw, 72px);
+    line-height: 1.1;
+    color: var(--brown);
+    font-weight: 400;
+  }
+  .cover-h1 em { font-style: italic; color: var(--terra); }
+  .cover-rule {
+    width: 56px; height: 1px;
+    background: var(--gold);
+    margin: 26px auto;
+  }
+  .cover-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--brown);
+    opacity: 0.65;
+  }
+
+  /* corner deco */
+  .deco-corner {
+    position: absolute;
+    width: 60px; height: 60px;
+    border-color: var(--blush);
+    border-style: solid;
+    opacity: 0.5;
+  }
+  .deco-tl { top: 28px; left: 28px; border-width: 2px 0 0 2px; }
+  .deco-br { bottom: 28px; right: 28px; border-width: 0 2px 2px 0; }
+
+  /* ---- S2 TUNANGAN PALETTE ---- */
+  .s-palette { background: var(--cream); gap: 48px; flex-direction: row; align-items: stretch; }
+  .s-palette-left { flex: 1.2; display: flex; flex-direction: column; justify-content: center; }
+  .s-palette-right { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+  .sec-eyebrow {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+  .sec-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--brown);
+    margin-bottom: 10px;
+  }
+  .sec-h2 em { font-style: italic; color: var(--terra); }
+  .sec-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .swatches {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .swatch-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .swatch-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.55);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .swatch-label { font-size: 10px; color: var(--brown); opacity: 0.65; text-align: center; max-width: 52px; line-height: 1.3; }
+
+  /* botanical illustration */
+  .botanical { width: 100%; max-width: 280px; }
+
+  /* ---- S3 BACKDROP & KURSI ---- */
+  .s-grid2 { background: var(--linen); }
+  .s-grid2 .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .mood-tile {
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .tile-visual {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .tile-cap { padding: 12px 14px; }
+  .tile-cap h3 { font-family: 'Playfair Display', serif; font-size: 13px; color: var(--brown); margin-bottom: 2px; }
+  .tile-cap p { font-size: 11px; color: #9B8878; font-weight: 300; line-height: 1.4; }
+
+  .tv-floral { background: linear-gradient(135deg,#F0E6D8,#E0D0BE); }
+  .tv-chair { background: linear-gradient(140deg,#EDE0D0,#D9C8B0); flex-direction: column; gap: 8px; }
+  .tv-setup { background: linear-gradient(135deg,#E8DDD0,#D5C7B5); }
+  .tv-props { background: linear-gradient(135deg,#EDE8DF,#DDD5C5); }
+
+  /* floral dots */
+  .floral-dots span {
+    display: block;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  /* ---- S4 BANNER ---- */
+  .s-banner { background: var(--cream); }
+  .banner-hero { display: flex; gap: 48px; align-items: stretch; }
+  .banner-main { flex: 1.4; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .banner-side { flex: 1; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+
+  .fabric-frame {
+    width: 220px;
+    aspect-ratio: 2/3;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(107,76,59,0.08);
+  }
+  .fabric-frame::before {
+    content: '— lukisan wajah —';
+    position: absolute;
+    bottom: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--brown);
+    opacity: 0.5;
+    letter-spacing: 1px;
+  }
+  .fabric-hanger {
+    position: absolute;
+    top: -18px;
+    width: 2px; height: 18px;
+    background: var(--gold);
+  }
+  .fabric-hanger::before {
+    content: '';
+    position: absolute;
+    top: -6px; left: -5px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+  }
+  .face-portrait {
+    display: flex; gap: 16px;
+  }
+  .portrait-unit { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .portrait-head { width: 36px; height: 36px; border-radius: 50%; background: var(--blush); border: 2px solid rgba(201,169,110,0.4); }
+  .portrait-body { width: 48px; height: 24px; border-radius: 24px 24px 0 0; background: var(--blush); opacity: 0.6; }
+
+  .handmade-badge {
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    width: 90px; height: 90px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    align-self: flex-end;
+  }
+  .handmade-badge span { font-family: 'Cormorant Garamond', serif; font-size: 11px; color: var(--gold); line-height: 1.4; font-style: italic; }
+
+  .texture-row { display: flex; flex-direction: column; gap: 10px; }
+  .texture-item {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; color: var(--brown); opacity: 0.75; font-weight: 300;
+  }
+  .texture-block { width: 40px; height: 24px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ---- S5 WEDDING PALETTE dark ---- */
+  .s-wedding-pal {
+    background: var(--karo-black);
+    color: var(--linen);
+  }
+  .s-wedding-pal .sec-eyebrow { color: var(--gold); }
+  .s-wedding-pal .sec-h2 { color: var(--linen); }
+  .s-wedding-pal .sec-h2 em { color: var(--gold); }
+  .s-wedding-pal .sec-sub { color: var(--gold); }
+  .s-wedding-pal .swatch-label { color: var(--linen); }
+  .s-wedding-pal .inner { display: flex; gap: 48px; align-items: stretch; }
+  .s-wedding-pal .left { flex: 1.2; display: flex; flex-direction: column; justify-content: center; }
+  .s-wedding-pal .right { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+  /* ulos illustration */
+  .ulos-wrap { width: 100%; max-width: 240px; }
+
+  /* ---- S6 LAYOUT ---- */
+  .s-layout { background: var(--linen); }
+  .layout-inner { display: flex; gap: 40px; align-items: flex-start; }
+  .layout-left { flex: 1.5; }
+  .layout-right { flex: 1; display: flex; flex-direction: column; gap: 14px; padding-top: 60px; }
+
+  .floor-plan {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-top: 28px;
+  }
+  .zone-row { display: flex; gap: 12px; }
+  .zone {
+    flex: 1;
+    border-radius: 6px;
+    padding: 16px 12px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .zone-adat { background: #8B1A1A11; border: 1.5px solid var(--karo-red); }
+  .zone-nasional { background: #C9A96E11; border: 1.5px solid var(--gold); }
+  .zone-hotel { background: var(--karo-black); border: none; color: var(--gold); }
+  .zone-divider {
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 4px;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+  .zone-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; }
+  .zone-sublabel { font-size: 10px; opacity: 0.65; font-weight: 300; }
+  .zone-icon { font-size: 18px; }
+
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--brown); opacity: 0.75; font-weight: 300; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .layout-note { font-size: 11px; font-style: italic; color: var(--brown); opacity: 0.5; margin-top: 10px; line-height: 1.5; }
+
+  /* ---- S7 CHECKLIST ---- */
+  .s-check { background: var(--cream); }
+  .check-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+  .check-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; color: var(--brown);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--blush);
+  }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 11px; }
+  .check-box-sq {
+    width: 15px; height: 15px; border: 1.5px solid var(--gold);
+    border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+  }
+  .check-text { font-size: 13px; color: var(--brown); font-weight: 300; line-height: 1.45; }
+
+  .adat-note {
+    background: white;
+    border-left: 3px solid var(--terra);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 18px;
+    margin-top: 24px;
+    font-size: 12.5px;
+    color: var(--brown);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .adat-note strong { color: var(--terra); font-weight: 400; }
+
+  /* ---- S8 CLOSING ---- */
+  .s-close {
+    background: var(--cream);
+    align-items: center;
+    text-align: center;
+  }
+  .close-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(22px, 4vw, 38px);
+    color: var(--brown);
+    line-height: 1.35;
+    max-width: 560px;
+    margin: 0 auto 20px;
+  }
+  .close-attr {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--brown);
+    opacity: 0.55;
+    letter-spacing: 1px;
+  }
+  .close-monogram {
+    margin-top: 36px;
+    width: 60px; height: 60px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* divider between sections */
+  .section-sep {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--karo-red), var(--gold), var(--karo-red));
+    opacity: 0.3;
+  }
+
+  /* staggered children animation */
+  .stagger > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .slide.visible .stagger > * { opacity: 1; transform: translateY(0); }
+  .slide.visible .stagger > *:nth-child(1) { transition-delay: 0.1s; }
+  .slide.visible .stagger > *:nth-child(2) { transition-delay: 0.22s; }
+  .slide.visible .stagger > *:nth-child(3) { transition-delay: 0.34s; }
+  .slide.visible .stagger > *:nth-child(4) { transition-delay: 0.46s; }
+  .slide.visible .stagger > *:nth-child(5) { transition-delay: 0.58s; }
+  .slide.visible .stagger > *:nth-child(6) { transition-delay: 0.70s; }
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Moodboard Tunangan dan Hari Pernikahan — 8 slide presentasi</h2>
+
+<!-- NAV DOTS -->
+<nav class="nav" aria-label="Navigasi slide">
+  <button class="nav-dot active" onclick="goTo(0)" aria-label="Slide 1: Cover"></button>
+  <button class="nav-dot" onclick="goTo(1)" aria-label="Slide 2: Tunangan Palette"></button>
+  <button class="nav-dot" onclick="goTo(2)" aria-label="Slide 3: Backdrop"></button>
+  <button class="nav-dot" onclick="goTo(3)" aria-label="Slide 4: Banner"></button>
+  <button class="nav-dot" onclick="goTo(4)" aria-label="Slide 5: Pernikahan Palette"></button>
+  <button class="nav-dot" onclick="goTo(5)" aria-label="Slide 6: Layout"></button>
+  <button class="nav-dot" onclick="goTo(6)" aria-label="Slide 7: Checklist"></button>
+  <button class="nav-dot" onclick="goTo(7)" aria-label="Slide 8: Closing"></button>
+</nav>
+
+<!-- ===== S1: COVER ===== -->
+<section class="slide s-cover" id="s0">
+  <div class="deco-corner deco-tl"></div>
+  <div class="deco-corner deco-br"></div>
+  <div class="stagger" style="display:flex;flex-direction:column;align-items:center;">
+    <p class="cover-eyebrow">Moodboard Bridesmaid</p>
+    <h1 class="cover-h1">Tunangan &amp;<br><em>Hari Pernikahan</em></h1>
+    <div class="cover-rule"></div>
+    <p class="cover-sub">Simple · Hangat · Penuh Makna</p>
+    <!-- botanical deco SVG -->
+    <svg width="160" height="80" viewBox="0 0 160 80" fill="none" style="margin-top:18px;opacity:0.55;" aria-hidden="true">
+      <path d="M80 70 Q60 50 40 45 Q30 42 20 48" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <path d="M80 70 Q90 45 110 38 Q125 32 140 40" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <ellipse cx="20" cy="46" rx="9" ry="6" fill="#9AAF8E" opacity="0.6" transform="rotate(-20 20 46)"/>
+      <ellipse cx="35" cy="40" rx="8" ry="5" fill="#D4A5A5" opacity="0.6" transform="rotate(-35 35 40)"/>
+      <ellipse cx="52" cy="38" rx="7" ry="5" fill="#9AAF8E" opacity="0.5" transform="rotate(-15 52 38)"/>
+      <ellipse cx="108" cy="34" rx="8" ry="5" fill="#D4A5A5" opacity="0.55" transform="rotate(25 108 34)"/>
+      <ellipse cx="125" cy="28" rx="7" ry="5" fill="#9AAF8E" opacity="0.5" transform="rotate(10 125 28)"/>
+      <ellipse cx="140" cy="36" rx="6" ry="5" fill="#E8C9B8" opacity="0.55" transform="rotate(35 140 36)"/>
+      <!-- small roses -->
+      <circle cx="80" cy="20" r="7" fill="#D4A5A5" opacity="0.7"/>
+      <circle cx="80" cy="20" r="3" fill="#C07A5A" opacity="0.5"/>
+      <circle cx="64" cy="14" r="5" fill="#E8C9B8" opacity="0.65"/>
+      <circle cx="96" cy="12" r="6" fill="#D4A5A5" opacity="0.6"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== S2: TUNANGAN PALETTE ===== -->
+<section class="slide s-palette" id="s1">
+  <div class="s-palette-left stagger">
+    <p class="sec-eyebrow">Bagian 01 · Tunangan</p>
+    <h2 class="sec-h2">Tunangan<br><em>Palette & Mood</em></h2>
+    <p class="sec-sub">Acara Adat · Tanpa Cincin</p>
+    <div class="swatches">
+      <div class="swatch-item"><div class="swatch-circle" style="background:#D4A5A5;"></div><span class="swatch-label">Dusty Rose</span></div>
+      <div class="swatch-item"><div class="swatch-circle" style="background:#E8C9B8;"></div><span class="swatch-label">Blush</span></div>
+      <div class="swatch-item"><div class="swatch-circle" style="background:#9AAF8E;"></div><span class="swatch-label">Sage</span></div>
+      <div class="swatch-item"><div class="swatch-circle" style="background:#F7F1E8;border:1.5px solid #ddd;"></div><span class="swatch-label">Cream</span></div>
+      <div class="swatch-item"><div class="swatch-circle" style="background:#C9A96E;"></div><span class="swatch-label">Gold</span></div>
+      <div class="swatch-item"><div class="swatch-circle" style="background:#C07A5A;"></div><span class="swatch-label">Terracotta</span></div>
+    </div>
+  </div>
+  <div class="s-palette-right">
+    <svg class="botanical" viewBox="0 0 280 320" fill="none" aria-hidden="true">
+      <!-- stem -->
+      <path d="M140 300 Q130 250 120 200 Q110 160 130 120 Q150 80 140 40" stroke="#9AAF8E" stroke-width="2" fill="none"/>
+      <!-- left branches -->
+      <path d="M125 220 Q90 200 70 185" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <path d="M118 170 Q80 155 60 150" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <!-- right branches -->
+      <path d="M132 240 Q165 220 185 210" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <path d="M128 190 Q160 170 178 162" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <!-- leaves -->
+      <ellipse cx="62" cy="182" rx="14" ry="8" fill="#9AAF8E" opacity="0.55" transform="rotate(-20 62 182)"/>
+      <ellipse cx="55" cy="148" rx="12" ry="7" fill="#9AAF8E" opacity="0.45" transform="rotate(-15 55 148)"/>
+      <ellipse cx="188" cy="207" rx="13" ry="7" fill="#9AAF8E" opacity="0.5" transform="rotate(20 188 207)"/>
+      <ellipse cx="182" cy="159" rx="12" ry="7" fill="#9AAF8E" opacity="0.45" transform="rotate(15 182 159)"/>
+      <!-- peony top -->
+      <circle cx="140" cy="52" r="30" fill="#D4A5A5" opacity="0.65"/>
+      <circle cx="140" cy="52" r="20" fill="#E8C9B8" opacity="0.7"/>
+      <circle cx="140" cy="52" r="10" fill="#C07A5A" opacity="0.55"/>
+      <!-- small flowers -->
+      <circle cx="90" cy="130" r="16" fill="#D4A5A5" opacity="0.55"/>
+      <circle cx="90" cy="130" r="7" fill="#E8C9B8" opacity="0.6"/>
+      <circle cx="195" cy="135" r="14" fill="#E8C9B8" opacity="0.6"/>
+      <circle cx="195" cy="135" r="6" fill="#D4A5A5" opacity="0.5"/>
+      <!-- baby's breath dots -->
+      <circle cx="105" cy="95" r="4" fill="#F7F1E8" opacity="0.8" stroke="#D4A5A5" stroke-width="1"/>
+      <circle cx="168" cy="90" r="3" fill="#F7F1E8" opacity="0.8" stroke="#D4A5A5" stroke-width="1"/>
+      <circle cx="75" cy="112" r="3" fill="#E8C9B8" opacity="0.7"/>
+      <circle cx="205" cy="108" r="4" fill="#E8C9B8" opacity="0.65"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== S3: BACKDROP & KURSI ===== -->
+<section class="slide s-grid2" id="s2">
+  <div class="stagger">
+    <p class="sec-eyebrow">Bagian 01 · Tunangan</p>
+    <h2 class="sec-h2" style="margin-bottom:20px;">Backdrop &amp; <em>Kursi Foto</em></h2>
+  </div>
+  <div class="inner stagger" style="margin-top:0;">
+    <!-- tile 1 -->
+    <div class="mood-tile">
+      <div class="tile-visual tv-floral">
+        <svg width="120" height="100" viewBox="0 0 120 100" fill="none" aria-hidden="true">
+          <circle cx="20" cy="18" r="12" fill="#D4A5A5" opacity="0.65"/>
+          <circle cx="20" cy="18" r="5" fill="#C07A5A" opacity="0.45"/>
+          <circle cx="50" cy="12" r="10" fill="#E8C9B8" opacity="0.7"/>
+          <circle cx="50" cy="12" r="4" fill="#D4A5A5" opacity="0.5"/>
+          <circle cx="80" cy="20" r="13" fill="#D4A5A5" opacity="0.6"/>
+          <circle cx="80" cy="20" r="5" fill="#C07A5A" opacity="0.4"/>
+          <circle cx="100" cy="15" r="9" fill="#E8C9B8" opacity="0.65"/>
+          <circle cx="10" cy="45" r="8" fill="#9AAF8E" opacity="0.55"/>
+          <circle cx="35" cy="50" r="10" fill="#D4A5A5" opacity="0.5"/>
+          <circle cx="65" cy="55" r="8" fill="#9AAF8E" opacity="0.5"/>
+          <circle cx="90" cy="48" r="11" fill="#E8C9B8" opacity="0.6"/>
+          <circle cx="110" cy="55" r="7" fill="#D4A5A5" opacity="0.5"/>
+          <!-- eucalyptus -->
+          <path d="M5 70 Q30 60 55 65 Q80 70 110 62" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+          <ellipse cx="30" cy="62" rx="9" ry="5" fill="#9AAF8E" opacity="0.45" transform="rotate(-10 30 62)"/>
+          <ellipse cx="70" cy="66" rx="8" ry="5" fill="#9AAF8E" opacity="0.4" transform="rotate(5 70 66)"/>
+          <ellipse cx="100" cy="60" rx="7" ry="4" fill="#9AAF8E" opacity="0.4" transform="rotate(-5 100 60)"/>
+        </svg>
+      </div>
+      <div class="tile-cap">
+        <h3>Bunga-bunga Backdrop</h3>
+        <p>Dusty rose & sage — airy, tidak terlalu padat</p>
+      </div>
+    </div>
+    <!-- tile 2 -->
+    <div class="mood-tile">
+      <div class="tile-visual tv-chair">
+        <svg width="70" height="110" viewBox="0 0 70 110" aria-hidden="true" fill="none">
+          <!-- backrest -->
+          <rect x="8" y="8" width="54" height="38" rx="5" fill="#D4A5A5" opacity="0.6"/>
+          <circle cx="22" cy="24" r="5" fill="#F7F1E8" opacity="0.8"/>
+          <circle cx="35" cy="18" r="4" fill="#E8C9B8" opacity="0.7"/>
+          <circle cx="48" cy="25" r="4" fill="#F7F1E8" opacity="0.75"/>
+          <!-- seat -->
+          <rect x="6" y="46" width="58" height="10" rx="3" fill="#C07A5A" opacity="0.65"/>
+          <!-- legs -->
+          <rect x="10" y="56" width="7" height="46" rx="3" fill="#6B4C3B" opacity="0.6"/>
+          <rect x="53" y="56" width="7" height="46" rx="3" fill="#6B4C3B" opacity="0.6"/>
+        </svg>
+        <p style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brown);opacity:0.55;">kursi foto</p>
+      </div>
+      <div class="tile-cap">
+        <h3>Kursi Foto</h3>
+        <p>Satu kursi elegan sebagai spot foto utama</p>
+      </div>
+    </div>
+    <!-- tile 3 -->
+    <div class="mood-tile">
+      <div class="tile-visual tv-setup">
+        <svg width="160" height="100" viewBox="0 0 160 100" fill="none" aria-hidden="true">
+          <!-- backdrop panel -->
+          <rect x="10" y="5" width="140" height="70" rx="3" fill="#E8D5C5" opacity="0.5" stroke="#C9A96E" stroke-width="0.8"/>
+          <!-- flowers on backdrop -->
+          <circle cx="30" cy="20" r="8" fill="#D4A5A5" opacity="0.5"/>
+          <circle cx="55" cy="14" r="6" fill="#E8C9B8" opacity="0.55"/>
+          <circle cx="80" cy="18" r="9" fill="#D4A5A5" opacity="0.45"/>
+          <circle cx="110" cy="12" r="7" fill="#9AAF8E" opacity="0.4"/>
+          <circle cx="135" cy="20" r="6" fill="#E8C9B8" opacity="0.5"/>
+          <circle cx="42" cy="38" r="7" fill="#9AAF8E" opacity="0.35"/>
+          <circle cx="100" cy="35" r="6" fill="#D4A5A5" opacity="0.4"/>
+          <!-- chair -->
+          <rect x="66" y="28" width="28" height="22" rx="3" fill="#D4A5A5" opacity="0.65"/>
+          <rect x="63" y="50" width="34" height="6" rx="2" fill="#C07A5A" opacity="0.55"/>
+          <rect x="67" y="56" width="5" height="24" rx="2" fill="#6B4C3B" opacity="0.5"/>
+          <rect x="88" y="56" width="5" height="24" rx="2" fill="#6B4C3B" opacity="0.5"/>
+          <!-- floor -->
+          <rect x="10" y="75" width="140" height="2" rx="1" fill="#C9A96E" opacity="0.3"/>
+          <text x="80" y="92" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="9" fill="#6B4C3B" opacity="0.55">full setup view</text>
+        </svg>
+      </div>
+      <div class="tile-cap">
+        <h3>Susunan Keseluruhan</h3>
+        <p>Backdrop + kursi + pencahayaan lembut</p>
+      </div>
+    </div>
+    <!-- tile 4 -->
+    <div class="mood-tile">
+      <div class="tile-visual tv-props">
+        <svg width="140" height="90" viewBox="0 0 140 90" fill="none" aria-hidden="true">
+          <!-- ribbon -->
+          <path d="M20 40 Q40 30 60 40 Q80 50 100 40 Q120 30 130 38" stroke="#D4A5A5" stroke-width="2" fill="none"/>
+          <!-- dried flower bunch -->
+          <line x1="40" y1="70" x2="40" y2="30" stroke="#C8A97A" stroke-width="1.2"/>
+          <ellipse cx="34" cy="26" rx="5" ry="8" fill="#D4A5A5" opacity="0.6" transform="rotate(-20 34 26)"/>
+          <ellipse cx="40" cy="22" rx="5" ry="8" fill="#E8C9B8" opacity="0.65" transform="rotate(0 40 22)"/>
+          <ellipse cx="46" cy="26" rx="5" ry="8" fill="#9AAF8E" opacity="0.55" transform="rotate(20 46 26)"/>
+          <!-- name tag -->
+          <rect x="80" y="35" width="45" height="30" rx="3" fill="white" opacity="0.8" stroke="#C9A96E" stroke-width="0.8"/>
+          <line x1="102" y1="28" x2="102" y2="35" stroke="#C9A96E" stroke-width="0.8"/>
+          <circle cx="102" cy="26" r="2.5" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
+          <line x1="86" y1="48" x2="116" y2="48" stroke="#C07A5A" stroke-width="0.7" opacity="0.5"/>
+          <line x1="86" y1="54" x2="108" y2="54" stroke="#C07A5A" stroke-width="0.7" opacity="0.4"/>
+          <!-- washi tape -->
+          <rect x="10" y="62" width="30" height="8" rx="1" fill="#C9A96E" opacity="0.4"/>
+          <text x="25" y="69" text-anchor="middle" font-size="5" fill="#6B4C3B" opacity="0.5">washi</text>
+        </svg>
+      </div>
+      <div class="tile-cap">
+        <h3>Prop Details</h3>
+        <p>Pita, bunga kering, name tag, washi tape</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S4: BANNER KAIN ===== -->
+<section class="slide s-banner" id="s3">
+  <div class="stagger">
+    <p class="sec-eyebrow">Bagian 01 · Tunangan — Hero Element</p>
+    <h2 class="sec-h2">Banner Kain &amp; <em>Lukisan Wajah</em></h2>
+  </div>
+  <div class="banner-hero" style="margin-top:28px;">
+    <div class="banner-main stagger">
+      <div class="fabric-frame">
+        <div class="fabric-hanger"></div>
+        <div class="face-portrait">
+          <div class="portrait-unit">
+            <div class="portrait-head"></div>
+            <div class="portrait-body"></div>
+          </div>
+          <div style="width:1px;background:rgba(201,169,110,0.3);align-self:stretch;margin:4px 0;"></div>
+          <div class="portrait-unit">
+            <div class="portrait-head" style="background:#E8C9B8;"></div>
+            <div class="portrait-body" style="background:#E8C9B8;"></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;text-align:center;color:var(--brown);opacity:0.55;margin-top:14px;letter-spacing:1px;">Banner kain · dipajang di area foto</p>
+    </div>
+    <div class="banner-side stagger">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--brown);line-height:1.55;font-style:italic;">Dibuat dengan tangan — potret masa kecil yang menggemaskan, dicetak atau dilukis di atas kain katun dengan sentuhan personal.</p>
+      <div class="texture-row">
+        <div class="texture-item">
+          <div class="texture-block" style="background:repeating-linear-gradient(45deg,#E8DDD0 0px,#E8DDD0 3px,#F5EDE0 3px,#F5EDE0 6px);"></div>
+          <span>Kain katun / linen</span>
+        </div>
+        <div class="texture-item">
+          <div class="texture-block" style="background:linear-gradient(120deg,#D4A5A5,#E8C9B8);"></div>
+          <span>Watercolor wash blush</span>
+        </div>
+        <div class="texture-item">
+          <div class="texture-block" style="background:var(--gold);opacity:0.7;"></div>
+          <span>Aksen gold — border & teks</span>
+        </div>
+      </div>
+      <div class="handmade-badge">
+        <span>handmade<br>with love ✦</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S5: WEDDING PALETTE (dark) ===== -->
+<section class="slide s-wedding-pal" id="s4">
+  <div class="section-sep" style="position:absolute;top:0;left:0;right:0;"></div>
+  <div class="inner stagger">
+    <div class="left">
+      <p class="sec-eyebrow">Bagian 02 · Hari Pernikahan</p>
+      <h2 class="sec-h2">Hari <em>Pernikahan</em></h2>
+      <p class="sec-sub">Adat Karo · Hotel Venue · Duduk Lesehan</p>
+      <div class="swatches">
+        <div class="swatch-item"><div class="swatch-circle" style="background:#8B1A1A;"></div><span class="swatch-label" style="color:var(--linen);">Merah Adat</span></div>
+        <div class="swatch-item"><div class="swatch-circle" style="background:#2A2016;border:1.5px solid #555;"></div><span class="swatch-label" style="color:var(--linen);">Hitam</span></div>
+        <div class="swatch-item"><div class="swatch-circle" style="background:#C9A96E;"></div><span class="swatch-label" style="color:var(--linen);">Emas</span></div>
+        <div class="swatch-item"><div class="swatch-circle" style="background:#EDE8DF;"></div><span class="swatch-label" style="color:var(--linen);">Krem</span></div>
+        <div class="swatch-item"><div class="swatch-circle" style="background:#C8A97A;"></div><span class="swatch-label" style="color:var(--linen);">Tenun</span></div>
+      </div>
+    </div>
+    <div class="right" style="display:flex;align-items:center;justify-content:center;">
+      <!-- ulos / songket illustration -->
+      <svg class="ulos-wrap" viewBox="0 0 240 280" fill="none" aria-hidden="true">
+        <!-- fabric background -->
+        <rect x="20" y="10" width="200" height="260" rx="4" fill="#8B1A1A" opacity="0.85"/>
+        <!-- geometric karo patterns -->
+        <!-- top band -->
+        <rect x="20" y="10" width="200" height="28" rx="0" fill="#1C1612"/>
+        <!-- diamond row 1 -->
+        <g opacity="0.9">
+          <polygon points="60,50 80,70 60,90 40,70" fill="#C9A96E"/>
+          <polygon points="100,50 120,70 100,90 80,70" fill="#C9A96E"/>
+          <polygon points="140,50 160,70 140,90 120,70" fill="#C9A96E"/>
+          <polygon points="180,50 200,70 180,90 160,70" fill="#C9A96E"/>
+        </g>
+        <!-- inner diamonds -->
+        <g opacity="0.6">
+          <polygon points="60,58 72,70 60,82 48,70" fill="#1C1612"/>
+          <polygon points="100,58 112,70 100,82 88,70" fill="#1C1612"/>
+          <polygon points="140,58 152,70 140,82 128,70" fill="#1C1612"/>
+          <polygon points="180,58 192,70 180,82 168,70" fill="#1C1612"/>
+        </g>
+        <!-- horizontal stripe -->
+        <rect x="20" y="100" width="200" height="6" fill="#C9A96E" opacity="0.7"/>
+        <!-- center motif -->
+        <rect x="20" y="106" width="200" height="80" fill="#6B0F0F" opacity="0.5"/>
+        <polygon points="120,115 145,145 120,175 95,145" fill="#C9A96E" opacity="0.6"/>
+        <polygon points="120,125 138,145 120,165 102,145" fill="#8B1A1A"/>
+        <polygon points="120,133 132,145 120,157 108,145" fill="#C9A96E" opacity="0.7"/>
+        <!-- small side motifs -->
+        <polygon points="55,130 70,145 55,160 40,145" fill="#C9A96E" opacity="0.4"/>
+        <polygon points="185,130 200,145 185,160 170,145" fill="#C9A96E" opacity="0.4"/>
+        <!-- bottom stripe -->
+        <rect x="20" y="186" width="200" height="6" fill="#C9A96E" opacity="0.7"/>
+        <!-- bottom diamond row -->
+        <g opacity="0.85">
+          <polygon points="60,200 80,220 60,240 40,220" fill="#C9A96E"/>
+          <polygon points="100,200 120,220 100,240 80,220" fill="#C9A96E"/>
+          <polygon points="140,200 160,220 140,240 120,220" fill="#C9A96E"/>
+          <polygon points="180,200 200,220 180,240 160,220" fill="#C9A96E"/>
+        </g>
+        <g opacity="0.55">
+          <polygon points="60,208 72,220 60,232 48,220" fill="#1C1612"/>
+          <polygon points="100,208 112,220 100,232 88,220" fill="#1C1612"/>
+          <polygon points="140,208 152,220 140,232 128,220" fill="#1C1612"/>
+          <polygon points="180,208 192,220 180,232 168,220" fill="#1C1612"/>
+        </g>
+        <!-- bottom band -->
+        <rect x="20" y="242" width="200" height="28" rx="0" fill="#1C1612"/>
+        <!-- label -->
+        <text x="120" y="265" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#C9A96E" opacity="0.8">uis nipes · motif karo</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S6: LAYOUT VENUE ===== -->
+<section class="slide s-layout" id="s5">
+  <div class="stagger">
+    <p class="sec-eyebrow">Bagian 02 · Hari Pernikahan</p>
+    <h2 class="sec-h2">Layout <em>Venue</em></h2>
+  </div>
+  <div class="layout-inner" style="margin-top:24px;">
+    <div class="layout-left stagger">
+      <div class="floor-plan">
+        <!-- hotel zone top -->
+        <div style="margin-bottom:12px;">
+          <div class="zone zone-hotel" style="min-height:50px;border-radius:6px;flex-direction:row;gap:8px;">
+            <span class="zone-label" style="font-size:10px;">✦ Dekorasi Hotel (existing)</span>
+          </div>
+        </div>
+        <!-- divider line -->
+        <div style="height:1px;background:var(--gold);opacity:0.25;margin:12px 0;"></div>
+        <!-- lesehan zones -->
+        <div class="zone-row">
+          <div class="zone zone-adat">
+            <span class="zone-icon">🪴</span>
+            <span class="zone-label" style="color:var(--karo-red);">Area Tamu Adat</span>
+            <span class="zone-sublabel">Duduk lesehan</span>
+          </div>
+          <div class="zone-divider"></div>
+          <div class="zone zone-nasional">
+            <span class="zone-icon">🌿</span>
+            <span class="zone-label" style="color:var(--brown);">Area Tamu Nasional</span>
+            <span class="zone-sublabel">Lesehan / kursi</span>
+          </div>
+        </div>
+        <p class="layout-note" style="margin-top:14px;">Layout bersifat ilustratif · sesuaikan dengan kondisi aktual venue</p>
+      </div>
+    </div>
+    <div class="layout-right stagger">
+      <p style="font-family:'Playfair Display',serif;font-size:15px;color:var(--brown);margin-bottom:4px;">Keterangan</p>
+      <div class="legend-row"><div class="leg-dot" style="background:var(--karo-red);"></div>Area Tamu Adat Karo</div>
+      <div class="legend-row"><div class="leg-dot" style="background:var(--gold);"></div>Area Tamu Nasional</div>
+      <div class="legend-row"><div class="leg-dot" style="background:var(--karo-black);"></div>Dekorasi Hotel (existing)</div>
+      <div class="legend-row"><div class="leg-dot" style="background:var(--gold);width:20px;height:2px;border-radius:1px;"></div>Pemisah Area (kain / bunga)</div>
+      <div style="margin-top:16px;padding:12px;background:white;border-radius:6px;border-left:3px solid var(--karo-red);">
+        <p style="font-size:12px;color:var(--brown);font-weight:300;line-height:1.55;">Pemisah antara area adat & nasional bisa berupa <em style="font-family:'Cormorant Garamond',serif;">drape kain, rangkaian bunga</em>, atau signage elegan — bukan partisi keras.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S7: CHECKLIST ===== -->
+<section class="slide s-check" id="s6">
+  <div class="stagger">
+    <p class="sec-eyebrow">Bagian 02 · Hari Pernikahan</p>
+    <h2 class="sec-h2">Koordinasi <em>Hotel</em></h2>
+  </div>
+  <div class="check-cols stagger">
+    <div class="check-col">
+      <h4>Pre-Event</h4>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Meeting dengan event coordinator hotel</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Review & approve layout dekorasi existing</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Konfirmasi area lesehan — ukuran & alas</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Cek rundown waktu setup & strike dekorasi</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Pastikan area pemisah tamu sudah ditandai</p></div>
+    </div>
+    <div class="check-col">
+      <h4>On the Day</h4>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Bridesmaid tiba 2–3 jam sebelum acara</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Final check dekorasi & area lesehan</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Briefing keluarga soal pembagian zona tamu</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Siapkan signage / papan arah tamu</p></div>
+      <div class="check-item"><div class="check-box-sq"></div><p class="check-text">Koordinasi dengan MC soal protokol adat</p></div>
+    </div>
+  </div>
+  <div class="adat-note stagger">
+    <strong>Catatan Adat Karo:</strong> Posisi duduk lesehan mengikuti aturan adat. Konfirmasi detail protokol dengan tetua / panitia adat keluarga sebelum hari-H.
+  </div>
+</section>
+
+<!-- ===== S8: CLOSING ===== -->
+<section class="slide s-close" id="s7">
+  <div class="deco-corner deco-tl"></div>
+  <div class="deco-corner deco-br"></div>
+  <div class="stagger" style="display:flex;flex-direction:column;align-items:center;">
+    <svg width="120" height="60" viewBox="0 0 120 60" fill="none" aria-hidden="true" style="margin-bottom:24px;opacity:0.5;">
+      <path d="M60 55 Q40 40 20 35 Q10 32 5 38" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <path d="M60 55 Q80 38 100 32 Q112 28 116 35" stroke="#9AAF8E" stroke-width="1.5" fill="none"/>
+      <ellipse cx="5" cy="37" rx="7" ry="5" fill="#9AAF8E" opacity="0.55" transform="rotate(-20 5 37)"/>
+      <ellipse cx="20" cy="32" rx="7" ry="4" fill="#D4A5A5" opacity="0.55" transform="rotate(-30 20 32)"/>
+      <ellipse cx="40" cy="30" rx="6" ry="4" fill="#9AAF8E" opacity="0.45" transform="rotate(-10 40 30)"/>
+      <ellipse cx="80" cy="28" rx="6" ry="4" fill="#D4A5A5" opacity="0.5" transform="rotate(15 80 28)"/>
+      <ellipse cx="100" cy="30" rx="6" ry="4" fill="#9AAF8E" opacity="0.45" transform="rotate(25 100 30)"/>
+      <ellipse cx="116" cy="34" rx="6" ry="4" fill="#E8C9B8" opacity="0.5" transform="rotate(35 116 34)"/>
+      <circle cx="60" cy="16" r="12" fill="#D4A5A5" opacity="0.6"/>
+      <circle cx="60" cy="16" r="5" fill="#C07A5A" opacity="0.45"/>
+    </svg>
+    <p class="close-quote">"Semua akan indah<br>pada waktunya"</p>
+    <p class="close-attr">— dibuat dengan ❤ oleh bridesmaid terbaikmu</p>
+    <div class="close-monogram">M</div>
+  </div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  let current = 0;
+
+  function goTo(i) {
+    slides[current].classList.remove('visible');
+    dots[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('visible');
+    dots[current].classList.add('active');
+    slides[current].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // observe each slide
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        const idx = Array.from(slides).indexOf(e.target);
+        dots.forEach(d => d.classList.remove('active'));
+        dots[idx].classList.add('active');
+        current = idx;
+      }
+    });
+  }, { threshold: 0.35 });
+
+  slides.forEach(s => io.observe(s));
+
+  // keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' && current < slides.length - 1) goTo(current + 1);
+    if (e.key === 'ArrowUp' && current > 0) goTo(current - 1);
+  });
+
+  // init first
+  slides[0].classList.add('visible');
+</script>
